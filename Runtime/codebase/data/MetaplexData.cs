@@ -69,7 +69,7 @@ namespace Solana.Unity.SDK.Nft
             data = new MetaplexData();
         }
 
-        public Metaplex ParseData(string base64Data)
+        public Metaplex ParseData(string base64Data, bool includeCreators = true)
         {
             byte[] data = Convert.FromBase64String(base64Data);
 
@@ -104,14 +104,17 @@ namespace Solana.Unity.SDK.Nft
             index += 4;
             List<CreatorData> creators = new List<CreatorData>();
 
-            for (int i = 0; i < creatorsLenght; i++)
+            if (includeCreators)
             {
-                CreatorData creatorData = new CreatorData();
-                ObjectToByte.DecodeUTF8StringFromByte(data, index, (int)nameLength, out string creator);
-                creatorData.address = creator;
-                index += 32;
-                creatorData.verified = BitConverter.ToBoolean(data, index++);
-                creatorData.share = data[index++];
+                for (int i = 0; i < creatorsLenght; i++)
+                {
+                    CreatorData creatorData = new CreatorData();
+                    ObjectToByte.DecodeUTF8StringFromByte(data, index, (int)nameLength, out string creator);
+                    creatorData.address = creator;
+                    index += 32;
+                    creatorData.verified = BitConverter.ToBoolean(data, index++);
+                    creatorData.share = data[index++];
+                }   
             }
 
             metaplexData.data.creators = creators.ToArray();

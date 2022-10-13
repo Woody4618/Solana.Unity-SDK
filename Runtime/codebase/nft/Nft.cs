@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Solana.Unity.Rpc.Types;
 using UnityEngine;
 using Solana.Unity.Wallet;
 using Solana.Unity.Wallet.Utilities;
@@ -230,7 +231,7 @@ namespace Solana.Unity.SDK.Nft
         /// <param name="targetX"> Target width</param>
         /// <param name="targetY"> Target height</param>
         /// <returns></returns>
-        private static Texture2D Resize(Texture texture2D, int targetX, int targetY)
+        public static Texture2D Resize(Texture texture2D, int targetX, int targetY)
         {
             RenderTexture rt = new RenderTexture(targetX, targetY, 24);
             RenderTexture.active = rt;
@@ -240,16 +241,17 @@ namespace Solana.Unity.SDK.Nft
             result.Apply();
             return result;
         }
-        
+
         /// <summary>
         /// Get AccountData
         /// </summary>
         /// <param name="accountPublicKey"></param>
         /// <param name="rpcClient"></param>
+        /// <param name="commitment"></param>
         /// <returns></returns>
-        public static async Task<AccountInfo> GetAccountData(string accountPublicKey, IRpcClient rpcClient)
+        public static async Task<AccountInfo> GetAccountData(string accountPublicKey, IRpcClient rpcClient, Commitment commitment = Commitment.Confirmed)
         {
-            var result = await rpcClient.GetAccountInfoAsync(accountPublicKey);
+            var result = await rpcClient.GetAccountInfoAsync(accountPublicKey, commitment);
             return result.Result is {Value: { }} ? result.Result.Value : null;
         }
     }
