@@ -7,11 +7,19 @@ using Solana.Unity.Wallet;
 using Solana.Unity.Wallet.Bip39;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
+
 namespace Solana.Unity.SDK
 {
     public class InGameWallet : WalletBase
     {
         private const string EncryptedKeystoreKey = "EncryptedKeystore";
+
+        public InGameWallet(RpcCluster rpcCluster = RpcCluster.DevNet, 
+            string customRpc = null, 
+            bool autoConnectOnStartup = false) : base(rpcCluster, customRpc, autoConnectOnStartup)
+        {
+        }
 
         /// <inheritdoc />
         protected override Task<Account> _Login(string password = "")
@@ -21,6 +29,8 @@ namespace Solana.Unity.SDK
             byte[] decryptedKeystore;
             try
             {
+                if (encryptedKeystoreJson is null || string.IsNullOrEmpty(password))
+                    return Task.FromResult<Account>(null);
                 decryptedKeystore = keystoreService.DecryptKeyStoreFromJson(password, encryptedKeystoreJson);
             }
             catch (Exception e)
@@ -55,10 +65,10 @@ namespace Solana.Unity.SDK
         }
 
         /// <inheritdoc />
-        public override Task<byte[]> SignTransaction(Transaction transaction)
+        public override Task<Transaction> SignTransaction(Transaction transaction)
         {
             transaction.Sign(Account);
-            return Task.FromResult(transaction.Serialize());
+            return Task.FromResult(transaction);
         }
 
         private static string LoadPlayerPrefs(string key)
