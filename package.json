@@ -12,7 +12,8 @@
     }
   ],
   "dependencies": {
-    "com.unity.nuget.newtonsoft-json": "3.0.2"
+    "com.unity.nuget.newtonsoft-json": "3.0.2",
+    "com.atteneder.gltfast": "4.8.5"
   },
   "type": "module"
 }
