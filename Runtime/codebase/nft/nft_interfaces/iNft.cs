@@ -1,7 +1,7 @@
 
 namespace Solana.Unity.SDK.Nft { 
     public interface iNftStandard <T> {
-        T ParseData(string base64Data, bool includeCreators);
+        T ParseData(string base64Data);
     }
 }
 
