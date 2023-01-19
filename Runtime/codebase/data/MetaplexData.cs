@@ -113,6 +113,7 @@ namespace Solana.Unity.SDK.Nft
                 index += 32;
                 creatorData.verified = BitConverter.ToBoolean(data, index++);
                 creatorData.share = data[index++];
+                creators.Add(creatorData);
             }
             
             metaplexData.data.creators = creators.ToArray();
